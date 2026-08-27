@@ -1,0 +1,119 @@
+/* Minimal custom CSS on top of Bootstrap */
+
+:root {
+    --bg-green: #00A758;
+    --green-700: #018b01;
+    --green-800: #008000;
+    --card-bg: rgba(255, 255, 255, 0.92);
+    --text: #000;
+    --muted: #333;
+    --border: #ccc;
+    --shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+    --radius: 12px;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: grid;
+  background-color: #f5f6f8;
+  place-items: center;
+  background-color: var(--bg-green);
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.container {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  animation: fadeIn 0.9s ease-in-out;
+}
+
+.card {
+  border: none;
+  border-radius: 0.75rem;
+}
+
+.card-header {
+  background-color: #fff;
+  color: var(--green-800);
+  border-bottom: 1px solid #eee;
+  border-radius: 0.75rem 0.75rem 0 0 !important;
+  padding-right: 0.5rem;
+}
+
+label {
+    font-weight: 600;
+    color: var(--text);
+}
+
+/* TSAR display fields (Current & Concurrent) — using the same .form-control
+   tag/classes as Product/Face Amount guarantees identical height, padding,
+   border, and font-size automatically; these extra rules just make it look
+   like a read-only "display" instead of an editable input. */
+.tsar-display {
+  background-color: #eef1f4;
+  cursor: default;
+}
+
+.tsar-display:focus {
+  box-shadow: none;
+  border-color: var(--border);
+  background-color: #eef1f4;
+}
+
+#summaryCard {
+  background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
+  border: 1px solid #e0e6f5 !important;
+}
+
+.badge.bg-orange {
+  background-color: #fd7e14 !important;
+}
+
+.concurrent-row {
+  position: relative;
+  background-color: #fafafa;
+}
+
+.tsar-value {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+/* Remove (X) button pinned to the top-right corner of each concurrent row */
+.remove-concurrent-btn {
+  position: absolute;
+  top: 0.3rem;
+  right: 0.3rem;
+  z-index: 2;
+  padding: 0.5rem 0.5rem;
+}
+
+.currency-input {
+  text-align: right;
+}
+
+#finalActionBadge {
+  min-width: 160px;
+  display: inline-block;
+}
+
+/* Comfortable touch targets on phone/tablet */
+@media (max-width: 576px) {
+  .form-select, .form-control, .btn {
+    font-size: 1rem;
+  }
+  #finalActionBadge {
+    min-width: 100%;
+    margin-top: .5rem;
+  }
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: #eef2ff;
+}
