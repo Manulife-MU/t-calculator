@@ -11,25 +11,39 @@
 </head>
 <body>
 <main class="container">
+  <div class="card shadow-sm mb-2">
+    <div class="card-header fw-semibold py-3">
+      Medical requirements များကို ၂ နှစ်ကျော် Inforce ဖြစ်နေသော policies များအတွက် ထည့်သွင်းစဉ်းစားမည် မဟုတ်ပါ။ သို့သော် Financial requirements များ လိုအပ်နိုင်ပါသည်။
+    </div>
+  </div>
   <!-- ================= Case Details ================= -->
   <div class="card shadow-sm mb-2">
-    <div class="card-header fw-semibold">Case Details</div>
+    <div class="card-header fw-semibold">Case Details (အသေးစိတ်အချက်အလက်များ)</div>
     <div class="card-body row g-2">
       <div class="col-12 col-md-6">
-        <label for="agentType" class="form-label">Agent Type</label>
+        <label for="agentType" class="form-label">Advisor Type</label>
         <select id="agentType" class="form-select"></select>
       </div>
       <div class="col-12 col-md-6">
-        <label for="liAge" class="form-label">Life Insured (LI) Age - In Year </label>
+        <label for="liAge" class="form-label">
+          Life Insured Age (ပြည့်ပြီး အသက်ကိုသာဖြည့်သွင်းပါရန်)
+          <button type="button"
+                  class="btn btn-outline-success rounded-circle age-info-btn p-0"
+                  data-bs-toggle="popover"
+                  data-bs-trigger="focus"
+                  data-bs-placement="right"
+                  data-bs-html="true"
+                  data-bs-content="45 yrs 11 months → &lt;b&gt;45 yrs&lt;/b&gt; သာရွေးရန်&lt;br&gt;7 months → &lt;b&gt;0.5 (6 months)&lt;/b&gt; သာရွေးရန်"
+                  aria-label="LI Age ကိုဘယ်လိုရွေးမလဲ">!</button>
+        </label>
         <select id="liAge" class="form-select"></select>
-        <div class="form-text" id="ageBandHint"></div>
       </div>
     </div>
   </div>
 
   <!-- ================= Current Application ================= -->
   <div class="card shadow-sm mb-2">
-    <div class="card-header fw-semibold">Current Application</div>
+    <div class="card-header fw-semibold">Current Application (လက်ရှိအာမခံ လျှောက်လွှာ)</div>
     <div class="card-body">
       <div class="row g-2 align-items-end">
         <div class="col-12 col-md-4">
@@ -50,8 +64,8 @@
 
   <!-- ================= Concurrent Applications / Inforce Policies ================= -->
   <div class="card shadow-sm mb-2">
-    <div class="card-header d-flex justify-content-between align-items-center">
-      <span class="fw-semibold">Concurrent Applications / Inforce Policies</span>
+    <div class="card-header d-flex justify-content-between align-items-center px-3">
+      <span class="fw-semibold">Concurrent Applications / Inforce Policies (တင်သွင်းပြီး Issued ဖြစ်ရန်ကျန်ရှိသော Pending ပေါ်လစီများနှင့် /အသက်ဝင်နေသော ပေါ်လစီများ)</span>
       <button type="button" class="btn btn-sm btn-outline-success" id="addConcurrentBtn">+Add</button>
     </div>
     <div class="card-body">
@@ -67,7 +81,7 @@
     <div class="card-body">
       <div class="row g-2 align-items-center">
         <div class="col-12 col-md-6">
-          <div class="text-muted small text-uppercase">TSAR Grand Total</div>
+          <div class="text-muted small text-uppercase">TSAR စုစုပေါင်း ပမာဏ</div>
           <div class="fs-3 fw-bold" id="grandTsarValue">0 MMK</div>
         </div>
         <div class="col-12 col-md-6 text-md-end">

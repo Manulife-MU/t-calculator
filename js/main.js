@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+  // Enable the LI Age info popover
+  document.querySelectorAll('[data-bs-toggle="popover"]').forEach(el => new bootstrap.Popover(el));
+
   const agentTypeSelect = document.getElementById("agentType");
   const liAgeSelect = document.getElementById("liAge");
   const ageBandHint = document.getElementById("ageBandHint");
@@ -15,8 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const grandTsarValue = document.getElementById("grandTsarValue");
   const finalActionBadge = document.getElementById("finalActionBadge");
-  const ageBandUsed = document.getElementById("ageBandUsed");
-  const ruleExplanation = document.getElementById("ruleExplanation");
 
   // ---------- Populate static dropdowns ----------
   function fillSelect(select, values) {
@@ -100,9 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const style = ACTION_STYLE[result.action] || ACTION_STYLE["UNDEFINED"];
     finalActionBadge.className = `badge fs-5 px-3 py-2 ${style.badge}`;
     finalActionBadge.textContent = style.label;
-
-    ageBandUsed.textContent = result.band;
-    ruleExplanation.textContent = result.rule;
 
     ageBandHint.textContent = `Age band: ${getAgeBand(age)}`;
   }

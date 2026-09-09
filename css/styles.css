@@ -98,6 +98,18 @@ label {
   text-align: right;
 }
 
+/* LI Age info popover trigger */
+.age-info-btn {
+  width: 1.25rem;
+  height: 1.25rem;
+  line-height: 1;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0;
+  vertical-align: middle;
+  margin-left: 0.25rem;
+}
+
 #finalActionBadge {
   min-width: 160px;
   display: inline-block;

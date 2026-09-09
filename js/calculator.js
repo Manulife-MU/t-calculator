@@ -33,10 +33,9 @@ function determineMED(grandTSAR, agentType, age) {
       };
     }
     return {
-      action: LT18_BELOW_ACTION,
+      action: "None",
       band,
-      rule: `Age < 18: Grand TSAR (${formatMMK(tsar)}) ≤ ${formatMMK(THRESHOLD_LT18.MED2_MIN)} → ` +
-            `${LT18_BELOW_ACTION} (⚠ not specified)`
+      rule: `Age < 18: Grand TSAR (${formatMMK(tsar)}) ≤ ${formatMMK(THRESHOLD_LT18.MED2_MIN)} → None`
     };
   }
 
