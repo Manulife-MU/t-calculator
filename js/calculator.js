@@ -7,6 +7,10 @@ function computeTSAR(faceAmount, product) {
   return amount * rate;
 }
 
+function shouldIncludeInGrandTSAR(issuedDuration) {
+  return ISSUED_DURATION[issuedDuration] === true;
+}
+
 function computeGrandTSAR(currentTSAR, concurrentTSARList) {
   const concurrentSum = concurrentTSARList.reduce((sum, v) => sum + (Number(v) || 0), 0);
   return (Number(currentTSAR) || 0) + concurrentSum;
@@ -20,68 +24,169 @@ function getAgeBand(age) {
   return "out of range";
 }
 
-function determineMED(grandTSAR, agentType, age) {
+function getTKKWAgeBand(age) {
+  const a = Number(age);
+  if (a < 18) return "<18";
+  if (a >= 18 && a <= 45) return "18-45";
+  if (a >= 46 && a <= 62) return "46-62";
+  return "out of range";
+}
+
+function determineTKKW(grandTSAR, age) {
+  const band = getTKKWAgeBand(age);
+  const tsar = Number(grandTSAR) || 0;
+
+  if (band === "<18") {
+    return {
+      action: "NOT_APPLICABLE",
+      band,
+      rule: `TKKW: LI Age < 18 is Not Applicable — TKKW rules only apply from age 18 onward.`
+    };
+  }
+
+  if (band === "18-45") {
+    const max = TKKW_RULES["18-45"].NO_CHECKUP_MAX;
+    if (tsar <= max) {
+      return { 
+        action: "None", 
+        band, 
+        rule: `TKKW, Age 18-45: Grand TSAR (${formatMMK(tsar)}) ≤ ${formatMMK(max)} → No Checkup` 
+      };
+    }
+    return { 
+      action: "MED4", 
+      band, 
+      rule: `TKKW, Age 18-45: Grand TSAR (${formatMMK(tsar)}) > ${formatMMK(max)} → MED4` 
+    };
+  }
+
+  if (band === "46-62") {
+    const r = TKKW_RULES["46-62"];
+    if (tsar <= r.NO_CHECKUP_MAX) {
+      return { 
+        action: "None", 
+        band, 
+        rule: `TKKW, Age 46-62: Grand TSAR (${formatMMK(tsar)}) ≤ ${formatMMK(r.NO_CHECKUP_MAX)} → No Checkup` 
+      };
+    }
+    if (tsar <= r.MED3_MAX) {
+      return { 
+        action: "MED3", 
+        band, 
+        rule: `TKKW, Age 46-62: Grand TSAR (${formatMMK(tsar)}) ≤ ${formatMMK(r.MED3_MAX)} → MED3` 
+      };
+    }
+    if (tsar <= r.MED4_MAX) {
+      return { 
+        action: "MED4", 
+        band, 
+        rule: `TKKW, Age 46-62: Grand TSAR (${formatMMK(tsar)}) ≤ ${formatMMK(r.MED4_MAX)} → MED4` 
+      };
+    }
+    return { 
+      action: "MED5", 
+      band, 
+      rule: `TKKW, Age 46-62: Grand TSAR (${formatMMK(tsar)}) > ${formatMMK(r.MED4_MAX)} → MED5` 
+    };
+  }
+
+  return { 
+    action: "UNDEFINED", 
+    band, 
+    rule: `No TKKW rule is defined for LI Age ${age}.` 
+  };
+}
+
+function determineMED(grandTSAR, agentType, age, currentProduct) {
+  if (currentProduct === "TKKW") {
+    return determineTKKW(grandTSAR, age);
+  }
+
   const band = getAgeBand(age);
   const tsar = Number(grandTSAR) || 0;
 
   if (band === "<18") {
     if (tsar > THRESHOLD_LT18.MED2_MIN) {
-      return {
-        action: "MED2",
-        band,
-        rule: `Age < 18: Grand TSAR (${formatMMK(tsar)}) > ${formatMMK(THRESHOLD_LT18.MED2_MIN)} → MED2`
+      return { 
+        action: "MED2", 
+        band, 
+        rule: `Age < 18: Grand TSAR (${formatMMK(tsar)}) > ${formatMMK(THRESHOLD_LT18.MED2_MIN)} → MED2` 
       };
     }
-    return {
-      action: "None",
-      band,
-      rule: `Age < 18: Grand TSAR (${formatMMK(tsar)}) ≤ ${formatMMK(THRESHOLD_LT18.MED2_MIN)} → None`
+    return { 
+      action: "None", 
+      band, 
+      rule: `Age < 18: Grand TSAR (${formatMMK(tsar)}) ≤ ${formatMMK(THRESHOLD_LT18.MED2_MIN)} → None` 
     };
   }
 
   if (band === "18-45") {
     const threshold = THRESHOLD_18_45[agentType];
     if (tsar <= threshold) {
-      return {
-        action: "None",
-        band,
-        rule: `Age 18-45, ${agentType}: Grand TSAR (${formatMMK(tsar)}) ≤ ${formatMMK(threshold)} → None`
+      return { 
+        action: "None", 
+        band, 
+        rule: `Age 18-45, ${agentType}: Grand TSAR (${formatMMK(tsar)}) ≤ ${formatMMK(threshold)} → None` 
       };
     }
-    return {
-      action: "MED4",
-      band,
-      rule: `Age 18-45, ${agentType}: Grand TSAR (${formatMMK(tsar)}) > ${formatMMK(threshold)} → MED4`
+    return { 
+      action: "MED4", 
+      band, 
+      rule: `Age 18-45, ${agentType}: Grand TSAR (${formatMMK(tsar)}) > ${formatMMK(threshold)} → MED4` 
     };
   }
 
   if (band === "46-60") {
     if (tsar <= THRESHOLD_46_60.MED3_MAX) {
-      return {
-        action: "MED3",
-        band,
-        rule: `Age 46-60: Grand TSAR (${formatMMK(tsar)}) ≤ ${formatMMK(THRESHOLD_46_60.MED3_MAX)} → MED3`
+      return { 
+        action: "MED3", 
+        band, 
+        rule: `Age 46-60: Grand TSAR (${formatMMK(tsar)}) ≤ ${formatMMK(THRESHOLD_46_60.MED3_MAX)} → MED3` 
       };
     }
     if (tsar <= THRESHOLD_46_60.MED4_MAX) {
-      return {
-        action: "MED4",
-        band,
-        rule: `Age 46-60: ${formatMMK(THRESHOLD_46_60.MED3_MAX)} < Grand TSAR (${formatMMK(tsar)}) ≤ ${formatMMK(THRESHOLD_46_60.MED4_MAX)} → MED4`
+      return { 
+        action: "MED4", 
+        band, 
+        rule: `Age 46-60: ${formatMMK(THRESHOLD_46_60.MED3_MAX)} < Grand TSAR (${formatMMK(tsar)}) ≤ ${formatMMK(THRESHOLD_46_60.MED4_MAX)} → MED4` 
       };
     }
-    return {
-      action: "MED5",
-      band,
-      rule: `Age 46-60: Grand TSAR (${formatMMK(tsar)}) > ${formatMMK(THRESHOLD_46_60.MED4_MAX)} → MED5`
+    return { 
+      action: "MED5", 
+      band, 
+      rule: `Age 46-60: Grand TSAR (${formatMMK(tsar)}) > ${formatMMK(THRESHOLD_46_60.MED4_MAX)} → MED5` 
     };
   }
 
-  return {
-    action: "UNDEFINED",
-    band,
-    rule: `No rule is defined for age band ${band} (age=${age}) and agent type ${agentType}.`
+  return { 
+    action: "UNDEFINED", 
+    band, 
+    rule: `No rule is defined for age band ${band} (age=${age}) and agent type ${agentType}.` 
   };
+}
+
+function determineFinancial(grandTSAR) {
+  const tsar = Number(grandTSAR) || 0;
+
+  if (tsar > FINANCIAL_THRESHOLDS.TIER2_MIN) {
+    return {
+      tier: "TIER3",
+      items: FINANCIAL_REQUIREMENTS.TIER2,
+      rule: `Grand TSAR (${formatMMK(tsar)}) > ${formatMMK(FINANCIAL_THRESHOLDS.TIER2_MIN)} → Financial Questionnaire + Large Case Report + Solid Financial Evidence`
+    };
+  }
+  if (tsar > FINANCIAL_THRESHOLDS.TIER1_MIN) {
+    return {
+      tier: "TIER2",
+      items: FINANCIAL_REQUIREMENTS.TIER1,
+      rule: `Grand TSAR (${formatMMK(tsar)}) > ${formatMMK(FINANCIAL_THRESHOLDS.TIER1_MIN)} → Financial Questionnaire + Large Case Report`
+    };
+  }
+  return {
+    tier: "None",
+    items: FiNANCIAL_REQUIREMENTS.DEFAULT,
+    rule: `Default`
+  }
 }
 
 function formatMMK(value) {
