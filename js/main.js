@@ -14,7 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const addConcurrentBtn = document.getElementById("addConcurrentBtn");
   const rowTemplate = document.getElementById("concurrentRowTemplate");
 
-  const grandTsarValue = document.getElementById("grandTsarValue");
+  const medicalGrandTsarValue = document.getElementById("medicalGrandTsarValue");
+  const financialGrandTsarValue = document.getElementById("financialGrandTsarValue");
   const medicalActionBadge = document.getElementById("medicalActionBadge");
   const financialRequirementList = document.getElementById("financialRequirementList");
 
@@ -85,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderMedical(result) {
     const style = ACTION_STYLE[result.action] || ACTION_STYLE["UNDEFINED"];
-    medicalActionBadge.className = `badge fs-6 px-3 py-2 ${style.badge}`;
+    medicalActionBadge.className = `badge fs-6 px-3 py-2 text-bg-info`;
     medicalActionBadge.textContent = style.label;
   }
 
@@ -105,8 +106,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const currentTSAR = computeTSAR(currentFace, currentProduct);
     currentTsarBadge.textContent = formatMMK(currentTSAR);
 
-    // Concurrent entries
-    const concurrentTSARs = [];
+    const allConcurrentTSARs = [];
+    const medicalIncludedTSARs = [];
+
     concurrentList.querySelectorAll(".concurrent-row").forEach(row => {
       const face = parseNumber(row.querySelector(".concurrent-face").value);
       const product = row.querySelector(".concurrent-product").value;
@@ -115,20 +117,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
       row.querySelector(".concurrent-tsar").textContent = formatMMK(tsar);
 
-      const included = shouldIncludeInGrandTSAR(issuedDuration);
-      row.classList.toggle("border-warning", !included);
-      if (included) {
-        concurrentTSARs.push(tsar);
+      allConcurrentTSARs.push(tsar);
+
+      const includedInMedical = shouldIncludeInMedicalGrandTSAR(issuedDuration);
+      if (includedInMedical) {
+        medicalIncludedTSARs.push(tsar);
       }
+
+      row.classList.toggle("border-warning", !includedInMedical);
     });
 
-    const grandTSAR = computeGrandTSAR(currentTSAR, concurrentTSARs);
-    grandTsarValue.textContent = formatMMK(grandTSAR);
+    const medicalGrandTSAR = computeMedicalGrandTSAR(currentTSAR, medicalIncludedTSARs);
+    const financialGrandTSAR = computeFinancialGrandTSAR(currentTSAR, allConcurrentTSARs);
+
+    medicalGrandTsarValue.textContent = formatMMK(medicalGrandTSAR);
+    financialGrandTsarValue.textContent = formatMMK(financialGrandTSAR);
 
     if (!currentProduct || currentFace <= 0) {
-      renderFinancialPlaceholder("Enter Product & Face Amount to calculate");
+      // renderFinancialPlaceholder("Enter Product & Face Amount to calculate");
+      renderFinancialPlaceholder("");
     } else {
-      const financial = determineFinancial(grandTSAR);
+      const financial = determineFinancial(financialGrandTSAR);
       renderFinancial(financial);
     }
 
@@ -140,15 +149,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const missingAgentType = !isTKKW && !agentType;
 
     if (missingCommonInputs || missingAgentType) {
-      renderMedicalPlaceholder(
-        isTKKW
-          ? "Please select LI Age & Product"
-          : "Please select Advisor Type, LI Age & Product"
-      );
+      // renderMedicalPlaceholder(
+      //   isTKKW
+      //     ? "Please select LI Age & Product"
+      //     : "Please select Advisor Type, LI Age & Product"
+      // );
+      renderMedicalPlaceholder(null);
       return;
     }
 
-    const medical = determineMED(grandTSAR, agentType, age, currentProduct);
+    const medical = determineMED(medicalGrandTSAR, agentType, age, currentProduct);
     renderMedical(medical);
   }
 

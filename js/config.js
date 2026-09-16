@@ -9,8 +9,8 @@ const PRODUCT_RATES = {
 };
 
 const ISSUED_DURATION = {
-  "Less than 2 yrs": false,
-  "More than 2 yrs": true
+  "Less than 2 yrs": true,
+  "More than 2 yrs": false
 };
 
 const AGENT_TYPES = ["Normal", "MDRT", "COT", "TOT"];
@@ -47,13 +47,13 @@ const TKKW_RULES = {
 };
 
 const ACTION_STYLE = {
-  "None": { badge: "bg-success", label: "No medical check up" },
-  "MED2": { badge: "bg-info text-dark", label: "MED 2 Required" },
-  "MED3": { badge: "bg-warning text-dark", label: "MED 3 Required" },
-  "MED4": { badge: "bg-orange text-white", label: "MED 4 Required" },
-  "MED5": { badge: "bg-danger", label: "MED 5 Required" },
-  "NOT_APPLICABLE": { badge: "bg-secondary", label: "Not Applicable" },
-  "UNDEFINED": { badge: "bg-secondary", label: "No Rule Defined" }
+  "None": { label: "No medical check up" },
+  "MED2": { label: "MED 2" },
+  "MED3": { label: "MED 3" },
+  "MED4": { label: "MED 4" },
+  "MED5": { label: "MED 5" },
+  "NOT_APPLICABLE": { label: "Not Applicable" },
+  "UNDEFINED": { label: "No Rule Defined" }
 };
 
 const FINANCIAL_THRESHOLDS = {

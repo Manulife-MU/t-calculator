@@ -30,7 +30,7 @@
                   class="btn btn-outline-success rounded-circle age-info-btn p-0"
                   data-bs-toggle="popover"
                   data-bs-trigger="focus"
-                  data-bs-placement="right"
+                  data-bs-placement="auto"
                   data-bs-html="true"
                   data-bs-content="45 yrs 11 months → <b>45 yrs</b> သာရွေးရန်<br>7 months → <b>0.5 (6 months)</b> သာရွေးရန်"
                   aria-label="LI Age ကိုဘယ်လိုရွေးမလဲ">!</button>
@@ -59,7 +59,6 @@
       </div>
     </div>
   </div>
-
   <!-- ================= Concurrent Applications / Inforce Policies ================= -->
   <div class="card shadow-sm mb-2">
     <div class="card-header d-flex justify-content-between align-items-center px-3">
@@ -78,26 +77,34 @@
   <!-- ================= Summary / Result ================= -->
   <div class="card shadow border-0" id="summaryCard">
     <div class="card-body">
-      <div class="row g-2 align-items-start">
-        <div class="col-12 col-md-6">
-          <div class="text-muted small text-uppercase">TSAR စုစုပေါင်း ပမာဏ</div>
-          <div class="fs-3 fw-bold" id="grandTsarValue">0 MMK</div>
-        </div>
-        <div class="col-12 col-md-6">
-          <div class="text-muted small text-uppercase mb-1">Action</div>
-
-          <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
-            <span class="fw-semibold">Medical -</span>
-            <span class="badge fs-6 px-3 py-2" id="medicalActionBadge">—</span>
-          </div>
-
-          <div class="d-flex align-items-start flex-wrap gap-2">
-            <span class="fw-semibold">Financial -</span>
-            <ul class="mb-0 ps-3" id="financialRequirementList">
-              <li class="text-muted">—</li>
-            </ul>
-          </div>
-        </div>
+      <div class="table-responsive">
+        <table class="table table-hover table-sm align-middle">
+          <thead class="table-light">
+            <tr>
+              <th></th>
+              <th>Medical</th>
+              <th>Financial</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-start table-light row-label">TSAR စုစုပေါင်း ပမာဏ</td>
+              <td class="fw-bold" id="medicalGrandTsarValue" data-label="Medical">0 MMK</td>
+              <td class="fw-bold" id="financialGrandTsarValue" data-label="Financial">0 MMK</td>
+            </tr>
+            <tr>
+              <td class="text-start table-light row-label">Result</td>
+              <td data-label="Medical">
+                <span class="badge fs-6 px-3 py-2" id="medicalActionBadge">—</span>
+              </td>
+              <td class="text-start" data-label="Financial">
+                <ul class="mb-0 ps-3" id="financialRequirementList">
+                  <li class="text-muted">—</li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -126,7 +133,6 @@
     </div>
   </div>
 </template>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/config.js"></script>
 <script src="js/calculator.js"></script>

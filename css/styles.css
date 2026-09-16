@@ -1,5 +1,4 @@
 /* Minimal custom CSS on top of Bootstrap */
-
 :root {
     --bg-green: #00A758;
     --green-700: #018b01;
@@ -11,7 +10,6 @@
     --shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
     --radius: 12px;
 }
-
 body {
   min-height: 100vh;
   margin: 0;
@@ -21,7 +19,6 @@ body {
   background-color: var(--bg-green);
   font-family: 'Segoe UI', Tahoma, sans-serif;
 }
-
 .container {
   width: 100%;
   max-width: 980px;
@@ -32,12 +29,10 @@ body {
   box-shadow: var(--shadow);
   animation: fadeIn 0.9s ease-in-out;
 }
-
 .card {
   border: none;
   border-radius: 0.75rem;
 }
-
 .card-header {
   background-color: #fff;
   color: var(--green-800);
@@ -45,12 +40,27 @@ body {
   border-radius: 0.75rem 0.75rem 0 0 !important;
   padding-right: 0.5rem;
 }
-
 label {
     font-weight: 600;
     color: var(--text);
 }
-
+/* Align the "Advisor Type" and "Life Insured Age" selects so they always
+   start at the same vertical position, no matter how many lines either
+   label wraps to at a given viewport width (e.g. "Life Insured Age (...)"
+   wraps to 2 lines + an info icon on iPad Mini/portrait tablets, while
+   "Advisor Type" stays on 1 line).
+   Bootstrap's .row already stretches col-md-6 siblings to equal height
+   (flex default align-items: stretch), so instead of guessing a fixed
+   label height, we make each column a flex column and push its content
+   to the bottom — this self-corrects at any width/line-wrap combination.
+   :has() scopes this to only the two columns containing these selects
+   (both ids are unique on the page), so no other layout is affected. */
+.card-body.row > div:has(#agentType),
+.card-body.row > div:has(#liAge) {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
 /* TSAR display fields (Current & Concurrent) — using the same .form-control
    tag/classes as Product/Face Amount guarantees identical height, padding,
    border, and font-size automatically; these extra rules just make it look
@@ -59,32 +69,48 @@ label {
   background-color: #eef1f4;
   cursor: default;
 }
-
 .tsar-display:focus {
   box-shadow: none;
   border-color: var(--border);
   background-color: #eef1f4;
 }
-
 #summaryCard {
   background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
   border: 1px solid #e0e6f5 !important;
 }
-
-.badge.bg-orange {
-  background-color: #fd7e14 !important;
+.table-responsive {
+    border-radius: 10px;
+    overflow: auto;
+    border: 1px solid #e9ecef;
+    -webkit-overflow-scrolling: touch;
 }
-
+.table {
+    margin-bottom: 0;
+    font-size: 0.95rem;
+}
+.table thead {
+    background-color: #f9fafb;
+}
+.table thead th {
+    border-color: #e9ecef;
+    padding: 1rem;
+    font-weight: 600;
+    color: #495057;
+    font-size: 0.9rem;
+}
+.table tbody td {
+    padding: 1rem;
+    border-color: #e9ecef;
+    vertical-align: middle;
+}
 .concurrent-row {
   position: relative;
   background-color: #fafafa;
 }
-
 .tsar-value {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
 }
-
 /* Remove (X) button pinned to the top-right corner of each concurrent row */
 .remove-concurrent-btn {
   position: absolute;
@@ -93,11 +119,9 @@ label {
   z-index: 2;
   padding: 0.5rem 0.5rem;
 }
-
 .currency-input {
   text-align: right;
 }
-
 /* LI Age info popover trigger */
 .age-info-btn {
   width: 1.25rem;
@@ -109,12 +133,10 @@ label {
   vertical-align: middle;
   margin-left: 0.25rem;
 }
-
 #finalActionBadge {
   min-width: 160px;
   display: inline-block;
 }
-
 /* Comfortable touch targets on phone/tablet */
 @media (max-width: 576px) {
   .form-select, .form-control, .btn {
@@ -125,7 +147,62 @@ label {
     margin-top: .5rem;
   }
 }
-
 .accordion-button:not(.collapsed) {
   background-color: #eef2ff;
+}
+
+/* =========================================================================
+   Phone & tablet only (below Bootstrap's lg breakpoint, 992px): shrink the
+   select boxes and smooth out the summaryCard result table. Nothing else
+   is affected — desktop/large-tablet-landscape layout is unchanged.
+   ========================================================================= */
+@media (max-width: 991.98px) {
+
+  /* Select boxes were feeling oversized on phone/tablet — reduce vertical
+     padding and font-size a touch (left/right padding untouched so the
+     Bootstrap dropdown-arrow icon still has its normal spacing). */
+  .form-select {
+    font-size: 0.9rem;
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+  }
+
+  /* Result table: keep it as a real table (not stacked cards) but make it
+     smooth/readable at narrow widths — smaller font, tighter cell padding,
+     predictable column widths via table-layout:fixed, and proper text
+     wrapping so the Financial requirement list / Medical badge never
+     overflow or get cut off. */
+  #summaryCard .table {
+    table-layout: fixed;
+    font-size: 0.8rem;
+  }
+  #summaryCard .table th,
+  #summaryCard .table td {
+    padding: 0.5rem 0.4rem;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+  #summaryCard .table th:first-child,
+  #summaryCard .table td:first-child {
+    width: 30%;
+  }
+  #summaryCard .table th:nth-child(2),
+  #summaryCard .table td:nth-child(2),
+  #summaryCard .table th:nth-child(3),
+  #summaryCard .table td:nth-child(3) {
+    width: 35%;
+  }
+  #summaryCard .table .badge {
+    font-size: 0.72rem;
+    padding: 0.3rem 0.5rem;
+    white-space: normal;
+  }
+  #summaryCard .table ul {
+    padding-left: 1rem;
+    margin-bottom: 0;
+    text-align: left;
+  }
+  #summaryCard .table li {
+    font-size: 0.78rem;
+  }
 }
