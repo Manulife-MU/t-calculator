@@ -11,8 +11,43 @@
 <body>
 <main class="container">
   <div class="card shadow-sm mb-2">
-    <div class="card-header fw-semibold py-3">
-      Medical requirements များကို ၂ နှစ်ကျော် Inforce ဖြစ်နေသော policies များအတွက် ထည့်သွင်းစဉ်းစားမည် မဟုတ်ပါ။ သို့သော် Financial requirements များ လိုအပ်နိုင်ပါသည်။
+    <div class="card-header row fw-semibold py-3">
+      <div class="col-lg-11 col-md-10">
+        Medical requirements များကို ၂ နှစ်ကျော် Inforce ဖြစ်နေသော policies များအတွက် ထည့်သွင်းစဉ်းစားမည် မဟုတ်ပါ။ သို့သော် Financial requirements များ လိုအပ်နိုင်ပါသည်။
+      </div> 
+      <div class="col-auto mt-2">
+        <button type="button" class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#disclaimerModal" aria-label="Disclaimer">
+          ! Beta
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="disclaimerModal" tabindex="-1" aria-labelledby="disclaimerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-warning" id="disclaimerModalLabel">
+                    Beta Disclaimer
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <p class="mb-0">
+                    ဤ TSAR Calculator သည် စမ်းသပ်ဆဲ (Beta) Version ဖြစ်ပါသည်။
+                    Customer များနှင့် မတွေ့ဆုံမီ သို့မဟုတ် အရောင်းဆောင်ရွက်နေစဉ်
+                    လိုအပ်နိုင်သည့် Medical Requirements နှင့် Financial Requirements များကို
+                    ကြိုတင်သိရှိနိုင်ရန် ရည်ရွယ်ထားသော Reference Tool တစ်ခုဖြစ်ပါသည်။
+
+                    Calculator မှ ဖော်ပြသော ရလဒ်များကို ကိုးကားရန်အတွက်သာ
+                    အသုံးပြုရမည်ဖြစ်ပြီး နောက်ဆုံးအတည်ပြုချက်အဖြစ် သတ်မှတ်၍ မရပါ။
+
+                    Customer တစ်ဦးချင်းစီ၏ ကျန်းမာရေးအခြေအနေ၊ Pre-existing Conditions နှင့်
+                    အခြားသက်ဆိုင်ရာ အချက်အလက်များအပေါ် မူတည်၍ Medical နှင့် Financial Requirements
+                    များအား Underwriting Team မှ သုံးသပ်ဆုံးဖြတ်ပြီး နောက်ဆုံးအတည်ပြုမည် ဖြစ်ပါသည်။
+                </p>
+            </div>
+        </div>
     </div>
   </div>
   <!-- ================= Case Details ================= -->
@@ -93,9 +128,9 @@
               <td class="fw-bold" id="financialGrandTsarValue" data-label="Financial">0 MMK</td>
             </tr>
             <tr>
-              <td class="text-start table-light row-label">Result</td>
+              <td class="text-start table-light row-label">Action</td>
               <td data-label="Medical">
-                <span class="badge fs-6 px-3 py-2" id="medicalActionBadge">—</span>
+                <span id="medicalActionBadge">—</span>
               </td>
               <td class="text-start" data-label="Financial">
                 <ul class="mb-0 ps-3" id="financialRequirementList">

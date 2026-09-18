@@ -79,9 +79,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   addConcurrentBtn.addEventListener("click", addConcurrentRow);
 
-  function renderMedicalPlaceholder(message) {
-    medicalActionBadge.className = "badge fs-6 px-3 py-2 bg-secondary";
-    medicalActionBadge.textContent = message;
+  function renderMedicalPlaceholder() {
+    medicalActionBadge.removeAttribute("class");
+    medicalActionBadge.textContent = "-";
   }
 
   function renderMedical(result) {
@@ -90,11 +90,15 @@ document.addEventListener("DOMContentLoaded", () => {
     medicalActionBadge.textContent = style.label;
   }
 
-  function renderFinancialPlaceholder(message) {
-    financialRequirementList.innerHTML = `<li class="text-muted">${message}</li>`;
+  function renderFinancialPlaceholder() {
+    financialRequirementList.innerHTML = "-";
   }
 
   function renderFinancial(result) {
+    if (!result) {
+      renderFinancialPlaceholder();
+      return;
+    }
     financialRequirementList.innerHTML = result.items.map(item => `<li>${item}</li>`).join("");
   }
 
@@ -134,8 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
     financialGrandTsarValue.textContent = formatMMK(financialGrandTSAR);
 
     if (!currentProduct || currentFace <= 0) {
-      // renderFinancialPlaceholder("Enter Product & Face Amount to calculate");
-      renderFinancialPlaceholder("");
+      renderFinancialPlaceholder();
     } else {
       const financial = determineFinancial(financialGrandTSAR);
       renderFinancial(financial);
@@ -154,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
       //     ? "Please select LI Age & Product"
       //     : "Please select Advisor Type, LI Age & Product"
       // );
-      renderMedicalPlaceholder(null);
+      renderMedicalPlaceholder();
       return;
     }
 

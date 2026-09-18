@@ -187,11 +187,7 @@ function determineFinancial(financialGrandTSAR) {
       rule: `Financial Grand TSAR (${formatMMK(tsar)}) ≤ ${formatMMK(FINANCIAL_THRESHOLDS.TIER1_MIN)} → Financial Questionnaire + Large Case Report`
     };
   }
-  return {
-    tier: "None",
-    items: FINANCIAL_REQUIREMENTS.DEFAULT,
-    rule: `Not Specified`
-  };
+  return null;
 }
 
 function formatMMK(value) {
